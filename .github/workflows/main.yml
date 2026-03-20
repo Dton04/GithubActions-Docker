@@ -1,6 +1,6 @@
 name: CI/CD Docker
 
-on: 
+on:
   push:
     branches: [ "main" ]
 
@@ -9,28 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        # 1. Lấy code từ repo
-        - name: Checkout code
-          uses: actions/checkout@v6.0.2
-  
-        # 2. Login Docker Hub
-        - name: Login Docker Hub
-          uses: docker/login-action@v4.0.0
-          with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
-  
-        # 3. Build Docker Image (2 tags)
-        - name: Build Docker image
-          run: |
-            docker build \
-            -t ${{ secrets.DOCKER_USERNAME }}/github-actions-docker:latest \
-            -t ${{ secrets.DOCKER_USERNAME }}/github-actions-docker:${{ github.sha }} .
-  
-        # 4. Push lên Docker Hub
-        - name: Push Docker image
-          run: |
-            docker push ${{ secrets.DOCKER_USERNAME }}/github-actions-docker:latest
-            docker push ${{ secrets.DOCKER_USERNAME }}/github-actions-docker:${{ github.sha }}
-   
-  
+      # 1. Lấy code từ repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Login Docker Hub
+      - name: Login Docker Hub
+        uses: docker/login-action@v4.0.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 3. Build Docker Image (2 tags)
+      - name: Build Docker image
+        run: |
+          docker build \
+            -f .dockerFile \
+            -t ${{ secrets.DOCKER_USERNAME }}/nguyentandat:latest \
+            -t ${{ secrets.DOCKER_USERNAME }}/nguyentandat:${{ github.sha }} .
+
+      # 4. Push lên Docker Hub
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/nguyentandat:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/nguyentandat:${{ github.sha }}
