@@ -33,3 +33,5 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/nguyentandat:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/nguyentandat:${{ github.sha }}
+      - name: Deploy to server
+        run: curl -X POST ${{ secrets.DEPLOY_URL }}
